@@ -45,6 +45,7 @@ import com.mendhak.gpslogger.common.events.ServiceEvents;
 import com.mendhak.gpslogger.common.slf4j.Logs;
 import com.mendhak.gpslogger.loggers.Files;
 import org.slf4j.Logger;
+import com.google.android.gms.location.DetectedActivity;
 
 
 
@@ -248,6 +249,7 @@ public class GpsSimpleViewFragment extends GenericViewFragment implements View.O
         imgDuration.setOnClickListener(this);
 
         ImageView imgSpeed = (ImageView) rootView.findViewById(R.id.simpleview_imgSpeed);
+        imgSpeed.setImageLevel(DetectedActivity.UNKNOWN);
         imgSpeed.setOnClickListener(this);
 
         ImageView imgDistance = (ImageView) rootView.findViewById(R.id.simpleview_distance);
@@ -320,6 +322,13 @@ public class GpsSimpleViewFragment extends GenericViewFragment implements View.O
     @EventBusHook
     public void onEventMainThread(ServiceEvents.FileNamed fileNamed){
         showCurrentFileName(fileNamed.newFileName);
+    }
+
+    @EventBusHook
+    public void onEvent(ServiceEvents.ActivityRecognitionEvent activityRecognitionEvent){
+        ImageView imgSpeed = (ImageView) rootView.findViewById(R.id.simpleview_imgSpeed);
+
+        imgSpeed.setImageLevel(activityRecognitionEvent.result.getMostProbableActivity().getType());
     }
 
     public void displayLocationInfo(Location locationInfo){
@@ -433,6 +442,7 @@ public class GpsSimpleViewFragment extends GenericViewFragment implements View.O
         txtDirection.setText("");
 
         ImageView imgSpeed = (ImageView)rootView.findViewById(R.id.simpleview_imgSpeed);
+        imgSpeed.setImageLevel(DetectedActivity.UNKNOWN);
         clearColor(imgSpeed);
 
         TextView txtSpeed = (TextView) rootView.findViewById(R.id.simpleview_txtSpeed);

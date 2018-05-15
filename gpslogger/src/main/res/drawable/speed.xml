@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/on_vehicle_speed" android:maxLevel="0"/>
+    <item android:drawable="@drawable/on_bycicle_speed" android:maxLevel="1"/>
+    <item android:drawable="@drawable/walking_speed"    android:maxLevel="2"/>
+    <item android:drawable="@drawable/standing_speed"   android:maxLevel="3"/>
+    <item android:drawable="@drawable/unknown_speed"    android:maxLevel="4"/>
+    <item android:drawable="@drawable/tilting_speed"    android:maxLevel="5"/>
+    <item android:drawable="@drawable/walking_speed"    android:maxLevel="7"/>
+    <item android:drawable="@drawable/running_speed"    android:maxLevel="8"/>
+</level-list>

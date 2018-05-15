@@ -324,6 +324,18 @@ class Gpx10WriteHandler implements Runnable {
             if (!Strings.isNullOrEmpty(dgpsid)) {
                 track.append("<dgpsid>").append(dgpsid).append("</dgpsid>");
             }
+
+            if (!Strings.isNullOrEmpty(loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY))) {
+                track.append("<type>")
+                     .append((loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY).equals("IN_VEHICLE")) ? "V" :
+                             (loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY).equals("ON_BICYCLE")) ? "B" :
+                             (loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY).equals("ON_FOOT"   )) ? "F" :
+                             (loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY).equals("STILL"     )) ? "S" :
+                             (loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY).equals("TILTING"   )) ? "T" :
+                             (loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY).equals("WALKING"   )) ? "W" :
+                             (loc.getExtras().getString(BundleConstants.DETECTED_ACTIVITY).equals("RUNNING"   )) ? "R" : "U")
+                     .append("</type>");
+            }
         }
 
 
