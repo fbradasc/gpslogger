@@ -1065,21 +1065,39 @@ public class GpsLoggingService extends Service  {
             return;
         }
 
-        if(activityRecognitionEvent.result.getMostProbableActivity().getType() == DetectedActivity.STILL){
-            LOG.debug(activityRecognitionEvent.result.getMostProbableActivity().toString());
-            if(session.getUserStillSinceTimeStamp() == 0){
-                LOG.debug("Just entered still state, attempt to log");
-                startGpsManager();
-                session.setUserStillSinceTimeStamp(System.currentTimeMillis());
-            }
+        LOG.debug(activityRecognitionEvent.result.getMostProbableActivity().toString());
 
-        }
-        else {
-            LOG.debug(activityRecognitionEvent.result.getMostProbableActivity().toString());
-            //Reset the still-since timestamp
-            session.setUserStillSinceTimeStamp(0);
-            LOG.debug("Just exited still state, attempt to log");
-            startGpsManager();
+        switch (activityRecognitionEvent.result.getMostProbableActivity().getType()) {
+            case DetectedActivity.STILL:
+                    if(session.getUserStillSinceTimeStamp() == 0){
+                        LOG.debug("Just entered still state, attempt to log");
+                        startGpsManager();
+                        session.setUserStillSinceTimeStamp(System.currentTimeMillis());
+                    }
+                break;
+
+            case DetectedActivity.IN_VEHICLE:
+            case DetectedActivity.TILTING:
+                    LOG.debug("Not walking stop logging");
+                    stopManagerAndResetAlarm();
+                break;
+
+            case DetectedActivity.UNKNOWN:
+/*
+                    LOG.debug("Unknown activity stop logging");
+                    stopManagerAndResetAlarm();
+                break;
+*/
+            case DetectedActivity.ON_BICYCLE:
+            case DetectedActivity.ON_FOOT:
+            case DetectedActivity.WALKING:
+            case DetectedActivity.RUNNING:
+            default:
+                    //Reset the still-since timestamp
+                    session.setUserStillSinceTimeStamp(0);
+                    LOG.debug("Just exited still state, attempt to log");
+                    startGpsManager();
+                break;
         }
     }
 
